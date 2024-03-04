@@ -1,0 +1,6 @@
+Mobile-first Inclusive Survey Interface
+
+Abstract— This project focuses on designing a "Mobile-first Inclusive Survey Interface" to address the challenges posed by traditional survey designs in the mobile and ubiquitous computing era. With a rising trend in mobile device usage, the project aims to create a dynamic interface responsive to vertical scrolling, providing a more engaging and intuitive survey experience.
+The research employs a comprehensive needfinding plan, including interviews and heuristic evaluations, revealing user dissatisfaction with existing survey interfaces. Alternative design ideas, generated through AI prompts, include gamified progress trackers, emoji-based feedback, color-coded sections, and interactive elements.
+The colour-coded approach, emphasizing different shades of red and green for negative and positive values, is explored with considerations for colour blindness and reducing cognitive load for users with ADHD. The project emphasizes clear design, accessibility, and customization options for a diverse user base.
+By prioritizing a mobile-first approach and addressing user frustrations, this project contributes to developing an inclusive, engaging, and user-friendly survey experience, adhering to standard accessibility protocols.
