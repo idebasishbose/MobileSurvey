@@ -1,5 +1,7 @@
 package com.mobile.survey.surveypage
 
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -120,6 +122,11 @@ fun OptionItem(
     val zoomFactor by animateFloatAsState(targetValue = if (isSelected) 1.3f else 1f, label = "")
 
     val color = if (enableColor) option.color else R.color.white
+// Create a ColorMatrixColorFilter with the ColorMatrix
+    val colorMatrix = remember { ColorMatrix().apply { setSaturation(0f) } } // Desaturate the image
+
+    val colorFilter = remember { ColorMatrixColorFilter(colorMatrix) }
+
 
     Box(
         modifier = Modifier

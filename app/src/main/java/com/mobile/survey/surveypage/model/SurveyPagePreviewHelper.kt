@@ -51,7 +51,7 @@ fun surveyPagesState() = SurveyPagesState(
             verticalSurvey = true
         ),
         SurveyPageState(
-            question = "8. On a scale of 0 to 10, how likely are you repeat your purchase?",
+            question = "8. How likely are you  to repeat your purchase?",
             options = positiveList(),
             scaleType = ScaleType.POSITIVE,
             textVisible = true,
