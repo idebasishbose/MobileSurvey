@@ -159,14 +159,13 @@ private fun LazyListScope.indicatorItems(
                 val scale = if (isSelected) {
                     1.8f
                 } else if (isLeftEdgeItem || isRightEdgeItem) {
-                    1.1f
+                    .9f
                 } else {
                     1.2f
                 }
                 scaleX = scale
                 scaleY = scale
             }
-
             .clip(indicatorShape)
             .size(indicatorSize)
             .background(

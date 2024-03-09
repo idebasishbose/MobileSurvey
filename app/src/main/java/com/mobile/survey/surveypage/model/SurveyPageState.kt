@@ -1,5 +1,6 @@
 package com.mobile.survey.surveypage.model
 
+import androidx.compose.ui.graphics.Color
 import com.mobile.survey.R
 
 data class SurveyPageState(
@@ -16,16 +17,19 @@ data class SurveyPageState(
 sealed class Option(
     open val title: String,
     open val detailedTitle: String = "",
-    open val color: Int,
+    open val color: Color,
+    open val textColor: Color,
+
     open val scaleType: ScaleType = ScaleType.NEUTRAL
 )
 
 data class DynamicOption(
     override val title: String,
     override val detailedTitle: String = "",
-    override val color: Int,
+    override val color: Color,
+    override val textColor: Color = Color.Black,
     override val scaleType: ScaleType = ScaleType.NEUTRAL
-) : Option(title, detailedTitle, color, scaleType)
+) : Option(title, detailedTitle, color, textColor, scaleType)
 
 
 enum class ScaleType(val type: String, val color: Int) {

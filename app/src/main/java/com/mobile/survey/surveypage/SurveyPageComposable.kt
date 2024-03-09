@@ -33,7 +33,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.mobile.survey.R
 import com.mobile.survey.surveypage.model.Option
 import com.mobile.survey.surveypage.model.ScaleType
@@ -42,40 +41,36 @@ import com.mobile.survey.surveypage.model.positiveList
 
 @Composable
 fun SurveyPage(
-    enableColor: Boolean,
-    surveyPageState: SurveyPageState,
-    modifier: Modifier = Modifier
+    enableColor: Boolean, surveyPageState: SurveyPageState, modifier: Modifier = Modifier
 ) {
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(end = 50.dp),
+            .padding(end = 40.dp),
         verticalArrangement = Arrangement.Top,
     ) {
 
-        Spacer(modifier = Modifier.height(height = 50.dp))
+        Spacer(modifier = Modifier.height(height = 30.dp))
+
         Text(
             text = surveyPageState.question,
-            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)
+            style = MaterialTheme.typography.headlineSmall.copy(textAlign = TextAlign.Center)
         )
-        Spacer(modifier = Modifier.height(height = 100.dp))
+        Spacer(modifier = Modifier.height(height = 80.dp))
+
         OptionList(
             enableColor = enableColor,
             surveyPageState = surveyPageState,
             modifier = Modifier.border(width = 1.dp, color = Color.Black)
         )
-
     }
-
 }
 
 
 @Composable
 fun OptionList(
-    enableColor: Boolean,
-    surveyPageState: SurveyPageState,
-    modifier: Modifier = Modifier
+    enableColor: Boolean, surveyPageState: SurveyPageState, modifier: Modifier = Modifier
 ) {
 
     var selectedOption by remember { mutableStateOf<Option?>(null) }
@@ -86,10 +81,12 @@ fun OptionList(
                 val option = surveyPageState.options[index]
                 OptionItem(
                     enableColor = enableColor,
+                    itemHeight = if (surveyPageState.options.size > 5) 45 else 70,
                     surveyPageState = surveyPageState,
                     option = option,
                     isSelected = selectedOption == option,
-                    onSelected = { selectedOption = it }, scaleType = surveyPageState.scaleType
+                    onSelected = { selectedOption = it },
+                    scaleType = surveyPageState.scaleType
                 )
             }
         }
@@ -100,10 +97,12 @@ fun OptionList(
                 val option = newOption[index]
                 OptionItem(
                     enableColor = enableColor,
-                    surveyPageState = surveyPageState,
                     option = option,
                     isSelected = selectedOption == option,
-                    onSelected = { selectedOption = it }, scaleType = surveyPageState.scaleType
+                    onSelected = { selectedOption = it },
+                    scaleType = surveyPageState.scaleType,
+                    surveyPageState = surveyPageState,
+                    itemHeight = if (surveyPageState.options.size > 5) 50 else 70
                 )
             }
         }
@@ -118,33 +117,32 @@ fun OptionItem(
     isSelected: Boolean,
     onSelected: (Option) -> Unit,
     scaleType: ScaleType,
-    surveyPageState: SurveyPageState
+    surveyPageState: SurveyPageState,
+    itemHeight: Int
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
-    val zoomFactor by animateFloatAsState(targetValue = if (isSelected) 1.3f else 1f, label = "")
+    val zoomFactor by animateFloatAsState(targetValue = if (isSelected) 1.2f else 1f, label = "")
 
-    val color = if (enableColor) option.color else R.color.white
+    val color = if (enableColor) option.color else colorResource(id = R.color.white)
 
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .heightIn(min = 50.dp, max = 70.dp)
+            .heightIn(itemHeight.dp)
             .widthIn(min = 20.dp, max = 30.dp)
-            .background(color = colorResource(id = color))
+            .background(color = color)
             .border(width = 2.dp, color = borderColor)
             .graphicsLayer(scaleX = zoomFactor, scaleY = zoomFactor)
             .clickable(interactionSource = interactionSource,
                 indication = null,
-                onClick = { onSelected(option) }),
-        contentAlignment = Alignment.Center
+                onClick = { onSelected(option) }), contentAlignment = Alignment.Center
     ) {
         if (!surveyPageState.textVisible) return
 
         RadioText(
-            option = option,
-            scaleType = scaleType
+            option = option, scaleType = scaleType
         )
 
     }
@@ -154,7 +152,6 @@ fun OptionItem(
 
 
 @Composable
-
 fun RadioText(
     option: Option,
     scaleType: ScaleType,
@@ -184,8 +181,7 @@ fun RadioText(
 private fun PreviewSurveyPageComposableVertical() {
     Surface(color = Color.White) {
         SurveyPage(
-            enableColor = false,
-            surveyPageState = SurveyPageState(
+            enableColor = false, surveyPageState = SurveyPageState(
                 options = positiveList(),
                 textVisible = true,
                 verticalSurvey = true,
@@ -200,9 +196,7 @@ private fun PreviewSurveyPageComposableVertical() {
 private fun PreviewSurveyPageComposableHorizontal() {
     Surface(color = Color.White) {
         SurveyPage(
-            enableColor = false,
-            surveyPageState =
-            SurveyPageState(
+            enableColor = false, surveyPageState = SurveyPageState(
                 options = positiveList().reversed(),
                 textVisible = true,
                 verticalSurvey = false,

@@ -1,10 +1,14 @@
 package com.mobile.survey.surveypage.model
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.colorResource
 import com.mobile.survey.R
+import com.mobile.survey.surveypage.SortingOrder
+import com.mobile.survey.surveypage.createDynamicOptionsList
 
+@Composable
 fun surveyPagesState() = SurveyPagesState(
-    enableColor = true,
-    surveyPagesState = listOf(
+    enableColor = true, surveyPagesState = listOf(
         SurveyPageState(
             question = "1. How likely is it that you would recommend this company to a friend or colleague?",
             options = positiveList(),
@@ -41,22 +45,19 @@ fun surveyPagesState() = SurveyPagesState(
             scaleType = ScaleType.NEUTRAL,
             textVisible = true,
             verticalSurvey = true
-        ),
-        SurveyPageState(
+        ), SurveyPageState(
             question = "7. How responsive have we been to your questions about our services?",
             options = mixedList6(),
             scaleType = ScaleType.NEUTRAL,
             textVisible = true,
             verticalSurvey = true
-        ),
-        SurveyPageState(
+        ), SurveyPageState(
             question = "8. How likely are you to purchase any of our products again?",
             options = mixedList1(),
             scaleType = ScaleType.NEUTRAL,
             textVisible = true,
             verticalSurvey = true
-        ),
-        SurveyPageState(
+        ), SurveyPageState(
             question = "9. How likely are you  to repeat your purchase?",
             options = positiveList(),
             scaleType = ScaleType.POSITIVE,
@@ -67,141 +68,150 @@ fun surveyPagesState() = SurveyPagesState(
 )
 
 
-fun positiveList() = listOf(
-    DynamicOption(title = "10", color = R.color.green10),
-    DynamicOption(title = "9", color = R.color.green09),
-    DynamicOption(title = "8", color = R.color.green08),
-    DynamicOption(title = "7", color = R.color.green07),
-    DynamicOption(title = "6", color = R.color.green06),
-    DynamicOption(title = "5", color = R.color.green05),
-    DynamicOption(title = "4", color = R.color.green04),
-    DynamicOption(title = "3", color = R.color.green03),
-    DynamicOption(title = "2", color = R.color.green02),
-    DynamicOption(title = "1", color = R.color.green01),
-    DynamicOption(title = "0", color = R.color.white),
-)
+@Composable
+fun positiveList() = createDynamicOptionsList(R.color.green10, steps = 11)
 
-fun negativeList() = listOf(
-    DynamicOption(title = "0", color = R.color.white),
-    DynamicOption(title = "1", color = R.color.red01),
-    DynamicOption(title = "2", color = R.color.red02),
-    DynamicOption(title = "3", color = R.color.red03),
-    DynamicOption(title = "4", color = R.color.red04),
-    DynamicOption(title = "5", color = R.color.red05),
-    DynamicOption(title = "6", color = R.color.red06),
-    DynamicOption(title = "7", color = R.color.red07),
-    DynamicOption(title = "8", color = R.color.red08),
-    DynamicOption(title = "9", color = R.color.red09),
-    DynamicOption(title = "10", color = R.color.red10),
-)
 
+@Composable
+fun negativeList() = createDynamicOptionsList(R.color.red10, SortingOrder.NORMAL)
+
+
+@Composable
 fun mixedList1() = listOf(
     DynamicOption(
-        title = "2", detailedTitle = "Extremely likely", color = R.color.green03
-    ),
-    DynamicOption(
-        title = "1", detailedTitle = "Very likely", color = R.color.green02
-    ),
-    DynamicOption(
-        title = "0", detailedTitle = "Somewhat likely", color = R.color.green01
-    ),
-    DynamicOption(
-        title = "1", detailedTitle = "Not so likely", color = R.color.red01
-    ),
-    DynamicOption(
-        title = "2", detailedTitle = "Not at all likely", color = R.color.red02
-    ),
+        title = "2", detailedTitle = "Extremely likely", color = colorResource(id = R.color.green03)
+    ), DynamicOption(
+        title = "1", detailedTitle = "Very likely", color = colorResource(
+            id = R.color.green02
+        )
+    ), DynamicOption(
+        title = "0", detailedTitle = "Somewhat likely", color = colorResource(
+            id = R.color.green01
+        )
+    ), DynamicOption(
+        title = "1", detailedTitle = "Not so likely", color = colorResource(
+            id = R.color.red01
+        )
+    ), DynamicOption(
+        title = "2", detailedTitle = "Not at all likely", color = colorResource(id = R.color.red02)
+    )
 )
 
+
+@Composable
 fun mixedList2() = listOf(
     DynamicOption(
-        title = "2", detailedTitle = "Very satisfied", color = R.color.green02
+        title = "2",
+        detailedTitle = "Very satisfied",
+        color = colorResource(id = R.color.green02)
     ),
     DynamicOption(
-        title = "1", detailedTitle = "Somewhat satisfied", color = R.color.green01
+        title = "1",
+        detailedTitle = "Somewhat satisfied",
+        color = colorResource(id = R.color.green01)
     ),
     DynamicOption(
-        title = "0", detailedTitle = "Neither satisfied nor dissatisfied", color = R.color.white
+        title = "0",
+        detailedTitle = "Neither satisfied nor dissatisfied",
+        color = colorResource(id = R.color.white)
     ),
     DynamicOption(
-        title = "1", detailedTitle = "Somewhat dissatisfied", color = R.color.red01
+        title = "1",
+        detailedTitle = "Somewhat dissatisfied",
+        color = colorResource(id = R.color.red01)
     ),
     DynamicOption(
-        title = "2", detailedTitle = "Very dissatisfied", color = R.color.red02
+        title = "2",
+        detailedTitle = "Very dissatisfied",
+        color = colorResource(id = R.color.red02)
     ),
 )
 
+@Composable
 fun mixedList3() = listOf(
     DynamicOption(
-        title = "2", detailedTitle = "Extremely well", color = R.color.green03
+        title = "2", detailedTitle = "Extremely well", color = colorResource(id = R.color.green03)
     ),
     DynamicOption(
-        title = "1", detailedTitle = "Very well", color = R.color.green02
+        title = "1", detailedTitle = "Very well", color = colorResource(id = R.color.green02)
     ),
     DynamicOption(
-        title = "0", detailedTitle = "Somewhat well", color = R.color.green01
+        title = "0", detailedTitle = "Somewhat well", color = colorResource(id = R.color.green01)
     ),
     DynamicOption(
-        title = "1", detailedTitle = "Not so well", color = R.color.red01
+        title = "1", detailedTitle = "Not so well", color = colorResource(id = R.color.red01)
     ),
     DynamicOption(
-        title = "2", detailedTitle = "Not at all well", color = R.color.red02
+        title = "2", detailedTitle = "Not at all well", color = colorResource(id = R.color.red02)
     ),
 )
 
+@Composable
 fun mixedList4() = listOf(
     DynamicOption(
-        title = "2", detailedTitle = "Very high quality", color = R.color.green02
+        title = "2",
+        detailedTitle = "Very high quality",
+        color = colorResource(id = R.color.green02)
     ),
     DynamicOption(
-        title = "1", detailedTitle = "High quality", color = R.color.green01
+        title = "1", detailedTitle = "High quality", color = colorResource(id = R.color.green01)
     ),
     DynamicOption(
-        title = "0", detailedTitle = "Neither high nor low quality", color = R.color.white
+        title = "0",
+        detailedTitle = "Neither high nor low quality",
+        color = colorResource(id = R.color.white)
     ),
     DynamicOption(
-        title = "1", detailedTitle = "Low quality", color = R.color.red01
+        title = "1", detailedTitle = "Low quality", color = colorResource(id = R.color.red01)
     ),
     DynamicOption(
-        title = "2", detailedTitle = "Very low quality", color = R.color.red02
+        title = "2", detailedTitle = "Very low quality", color = colorResource(id = R.color.red02)
     ),
 )
 
+@Composable
 fun mixedList5() = listOf(
     DynamicOption(
-        title = "2", detailedTitle = "Excellent", color = R.color.green02
+        title = "2", detailedTitle = "Excellent", color = colorResource(id = R.color.green02)
     ),
     DynamicOption(
-        title = "1", detailedTitle = "Above average", color = R.color.green01
+        title = "1", detailedTitle = "Above average", color = colorResource(id = R.color.green01)
     ),
     DynamicOption(
-        title = "0", detailedTitle = "Average", color = R.color.white
+        title = "0", detailedTitle = "Average", color = colorResource(id = R.color.white)
     ),
     DynamicOption(
-        title = "1", detailedTitle = "Below average", color = R.color.red01
+        title = "1", detailedTitle = "Below average", color = colorResource(id = R.color.red01)
     ),
     DynamicOption(
-        title = "2", detailedTitle = "Poor", color = R.color.red02
+        title = "2", detailedTitle = "Poor", color = colorResource(id = R.color.red02)
     ),
 )
 
+@Composable
 fun mixedList6() = listOf(
     DynamicOption(
-        title = "3", detailedTitle = "Extremely responsive", color = R.color.green03
+        title = "3",
+        detailedTitle = "Extremely responsive",
+        color = colorResource(id = R.color.green03)
     ),
     DynamicOption(
-        title = "2", detailedTitle = "Very responsive", color = R.color.green02
+        title = "2", detailedTitle = "Very responsive", color = colorResource(id = R.color.green02)
     ),
     DynamicOption(
-        title = "1", detailedTitle = "Somewhat responsive", color = R.color.green01
+        title = "1",
+        detailedTitle = "Somewhat responsive",
+        color = colorResource(id = R.color.green01)
     ),
     DynamicOption(
-        title = "0", detailedTitle = "Not applicable", color = R.color.white
+        title = "0", detailedTitle = "Not applicable", color = colorResource(id = R.color.white)
     ),
     DynamicOption(
-        title = "1", detailedTitle = "Not so responsive", color = R.color.red01
+        title = "1", detailedTitle = "Not so responsive", color = colorResource(id = R.color.red01)
     ),
     DynamicOption(
-        title = "2", detailedTitle = "Not at all responsive", color = R.color.red02
+        title = "2",
+        detailedTitle = "Not at all responsive",
+        color = colorResource(id = R.color.red02)
     ),
 )
