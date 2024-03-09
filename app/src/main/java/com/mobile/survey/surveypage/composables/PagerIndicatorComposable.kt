@@ -16,8 +16,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -45,8 +47,8 @@ fun PagerIndicator(
     indicatorSize: Dp = 17.dp,
     indicatorShape: Shape = CircleShape,
     space: Dp = 20.dp,
-    activeColor: Color = Color.Gray,
-    inActiveColor: Color = Color.LightGray,
+    activeColor: Color = Color(0xFF6495ED),
+    inActiveColor: Color = Color(0xFF6495ED).copy(alpha = 0.5f),
     orientation: IndicatorOrientation = IndicatorOrientation.Horizontal,
     onClick: ((Int) -> Unit)? = null
 ) {
@@ -159,7 +161,7 @@ private fun LazyListScope.indicatorItems(
                 val scale = if (isSelected) {
                     1.8f
                 } else if (isLeftEdgeItem || isRightEdgeItem) {
-                    .9f
+                    1.2f
                 } else {
                     1.2f
                 }
@@ -180,6 +182,7 @@ private fun LazyListScope.indicatorItems(
                 text = (index + 1).toString(),
                 textAlign = TextAlign.Center,
                 style = typography.bodySmall,
+                color = contentColorFor(MaterialTheme.colorScheme.background),
                 modifier = Modifier.wrapContentHeight(Alignment.CenterVertically)
             )
         }

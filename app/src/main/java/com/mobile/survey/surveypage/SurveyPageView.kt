@@ -34,6 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mobile.survey.R
@@ -51,32 +53,27 @@ fun SurveyPageView(modifier: Modifier = Modifier) {
 
 
     Row(
-        modifier = modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically
     ) {
         val surveyPagesCarouselState = surveyPagesState()
         val pageCount = surveyPagesCarouselState.surveyPagesState.size
 
-        val pagerState =
-            rememberPagerState(initialPage = 0, pageCount = { pageCount })
+        val pagerState = rememberPagerState(initialPage = 0, pageCount = { pageCount })
         val coroutineScope = rememberCoroutineScope()
 
         Spacer(modifier = Modifier.width(10.dp))
 
-        PagerIndicator(
-            pagerState = pagerState,
+        PagerIndicator(pagerState = pagerState,
             orientation = IndicatorOrientation.Vertical,
             onClick = { index ->
                 // Handle click event, for example, scroll to the page at the clicked index
                 coroutineScope.launch {
                     pagerState.animateScrollToPage(index)
                 }
-            }
-        )
+            })
 
         SurveyPagesCarousel(
-            surveyPagesCarouselState = surveyPagesCarouselState,
-            pagerState = pagerState
+            surveyPagesCarouselState = surveyPagesCarouselState, pagerState = pagerState
         )
 
 
@@ -113,12 +110,7 @@ fun TextWithIconVerticalLayout(
 
 
         MovingArrowAnimation(painter = painter1, direction = ArrowDirection.UP, iconTint = iconTint)
-//        Icon(
-//            painter = painter1,
-//            contentDescription = contentDescription,
-//            tint = iconTint,
-//            modifier = Modifier.size(100.dp)
-//        )
+
         text1.forEach {
             Text(text = it.toString(), modifier = Modifier.padding(top = 4.dp))
         }
@@ -128,9 +120,7 @@ fun TextWithIconVerticalLayout(
         }
 
         MovingArrowAnimation(
-            direction = ArrowDirection.DOWN,
-            painter = painter2,
-            iconTint = iconTint
+            direction = ArrowDirection.DOWN, painter = painter2, iconTint = iconTint
         )
     }
 }
@@ -148,9 +138,9 @@ fun MovingArrowAnimation(direction: ArrowDirection, painter: Painter, iconTint: 
             animation = tween(
                 durationMillis = 1000, // Longer duration for subtle movement
                 easing = LinearEasing // Use LinearEasing for smooth motion
-            ),
-            repeatMode = RepeatMode.Reverse
-        ), label = ""
+            ), repeatMode = RepeatMode.Reverse
+        ),
+        label = ""
     )
 
     offsetY = offsetAnimation.dp
@@ -165,8 +155,7 @@ fun MovingArrowAnimation(direction: ArrowDirection, painter: Painter, iconTint: 
             painter = painter,
             contentDescription = null,
             tint = iconTint,
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         )
     }
 }
@@ -186,8 +175,7 @@ fun SurveyPagesCarousel(
     ) { page ->
 
         Box(
-            modifier
-                .wrapContentHeight()
+            modifier.wrapContentHeight()
         ) {
 
             SurveyPage(
@@ -196,14 +184,14 @@ fun SurveyPagesCarousel(
                 modifier
             )
 
-            TextWithIconVerticalLayout(
-                text1 = "Better",
+            TextWithIconVerticalLayout(text1 = "Better",
                 text2 = "Worse",
                 iconResId1 = R.drawable.baseline_arrow_upward_24,
                 iconResId2 = R.drawable.baseline_arrow_downward_24,
                 iconTint = Color.Black,
-                modifier = Modifier.align(Alignment.CenterEnd)
-            )
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .semantics { contentDescription = "" })
 
         }
     }
@@ -214,8 +202,7 @@ fun SurveyPagesCarousel(
 @Composable
 fun PreviewSurveyPage() {
     val pagerState = rememberPagerState(
-        initialPage = 0,
-        initialPageOffsetFraction = 0f
+        initialPage = 0, initialPageOffsetFraction = 0f
     ) {
         1
     }

@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,9 +58,11 @@ fun SurveyPage(
 
         Text(
             text = surveyPageState.question,
-            style = MaterialTheme.typography.headlineSmall.copy(textAlign = TextAlign.Center)
+            color = contentColorFor(MaterialTheme.colorScheme.background),
+            textAlign = TextAlign.Left,
+            style = MaterialTheme.typography.headlineSmall
         )
-        Spacer(modifier = Modifier.height(height = 80.dp))
+        Spacer(modifier = Modifier.height(height = 50.dp))
 
         OptionList(
             enableColor = enableColor,
@@ -129,7 +134,7 @@ fun OptionItem(
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .heightIn(itemHeight.dp)
             .widthIn(min = 20.dp, max = 30.dp)
             .background(color = color)
@@ -167,11 +172,15 @@ fun RadioText(
 
         else -> option.title
     }
-    Text(
-        text = title,
-        color = colorResource(id = R.color.black),
+    Text(text = title,
+        color = contentColorFor(MaterialTheme.colorScheme.background),
         textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics {
+                contentDescription = title
+            } // Add a meaningful content description
+
     )
 }
 

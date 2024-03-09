@@ -16,7 +16,7 @@ fun surveyPagesState() = SurveyPagesState(
             textVisible = true,
             verticalSurvey = true
         ), SurveyPageState(
-            question = "2. Overall, how dissatisfied did you get with the last service?",
+            question = "2. How dissatisfied were you with the recent service?",
             options = negativeList(),
             scaleType = ScaleType.POSITIVE,
             textVisible = true,
@@ -59,6 +59,12 @@ fun surveyPagesState() = SurveyPagesState(
             verticalSurvey = true
         ), SurveyPageState(
             question = "9. How likely are you  to repeat your purchase?",
+            options = positiveList(),
+            scaleType = ScaleType.POSITIVE,
+            textVisible = true,
+            verticalSurvey = true
+        ), SurveyPageState(
+            question = "10. Please provide an overall rating for this survey.",
             options = positiveList(),
             scaleType = ScaleType.POSITIVE,
             textVisible = true,
