@@ -1,7 +1,5 @@
 package com.mobile.survey.surveypage
 
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,9 +8,12 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -46,16 +47,19 @@ fun SurveyPage(
     modifier: Modifier = Modifier
 ) {
 
-
     Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceAround
+        modifier = modifier
+            .fillMaxSize()
+            .padding(end = 50.dp),
+        verticalArrangement = Arrangement.Top,
     ) {
 
+        Spacer(modifier = Modifier.height(height = 50.dp))
         Text(
             text = surveyPageState.question,
             style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)
         )
+        Spacer(modifier = Modifier.height(height = 100.dp))
         OptionList(
             enableColor = enableColor,
             surveyPageState = surveyPageState,
@@ -91,7 +95,6 @@ fun OptionList(
         }
     } else {
         LazyRow(modifier = modifier) {
-
             val newOption = surveyPageState.options.reversed()
             items(newOption.size) { index ->
                 val option = newOption[index]
@@ -122,16 +125,12 @@ fun OptionItem(
     val zoomFactor by animateFloatAsState(targetValue = if (isSelected) 1.3f else 1f, label = "")
 
     val color = if (enableColor) option.color else R.color.white
-// Create a ColorMatrixColorFilter with the ColorMatrix
-    val colorMatrix = remember { ColorMatrix().apply { setSaturation(0f) } } // Desaturate the image
-
-    val colorFilter = remember { ColorMatrixColorFilter(colorMatrix) }
 
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
+            .fillMaxSize()
+            .heightIn(min = 50.dp, max = 70.dp)
             .widthIn(min = 20.dp, max = 30.dp)
             .background(color = colorResource(id = color))
             .border(width = 2.dp, color = borderColor)
@@ -142,6 +141,7 @@ fun OptionItem(
         contentAlignment = Alignment.Center
     ) {
         if (!surveyPageState.textVisible) return
+
         RadioText(
             option = option,
             scaleType = scaleType

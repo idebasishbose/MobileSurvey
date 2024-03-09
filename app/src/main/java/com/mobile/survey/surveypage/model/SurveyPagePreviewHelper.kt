@@ -12,46 +12,52 @@ fun surveyPagesState() = SurveyPagesState(
             textVisible = true,
             verticalSurvey = true
         ), SurveyPageState(
-            question = "2. Overall, how satisfied or dissatisfied are you with our company?",
+            question = "2. Overall, how dissatisfied did you get with the last service?",
+            options = negativeList(),
+            scaleType = ScaleType.POSITIVE,
+            textVisible = true,
+            verticalSurvey = true
+        ), SurveyPageState(
+            question = "3. Overall, how satisfied or dissatisfied are you with our company?",
             options = mixedList2(),
             scaleType = ScaleType.NEUTRAL,
             textVisible = true,
             verticalSurvey = true
         ), SurveyPageState(
-            question = "3. How well do our products meet your needs?",
+            question = "4. How well do our products meet your needs?",
             options = mixedList3(),
             scaleType = ScaleType.NEUTRAL,
             textVisible = true,
             verticalSurvey = true
         ), SurveyPageState(
-            question = "4. How would you rate the quality of the product?",
+            question = "5. How would you rate the quality of the product?",
             options = mixedList4(),
             scaleType = ScaleType.NEUTRAL,
             textVisible = true,
             verticalSurvey = true
         ), SurveyPageState(
-            question = "5. How would you rate the value for money of the product?",
+            question = "6. How would you rate the value for money of the product?",
             options = mixedList5(),
             scaleType = ScaleType.NEUTRAL,
             textVisible = true,
             verticalSurvey = true
         ),
         SurveyPageState(
-            question = "6. How responsive have we been to your questions about our services?",
+            question = "7. How responsive have we been to your questions about our services?",
             options = mixedList6(),
             scaleType = ScaleType.NEUTRAL,
             textVisible = true,
             verticalSurvey = true
         ),
         SurveyPageState(
-            question = "7. How likely are you to purchase any of our products again?",
+            question = "8. How likely are you to purchase any of our products again?",
             options = mixedList1(),
             scaleType = ScaleType.NEUTRAL,
             textVisible = true,
             verticalSurvey = true
         ),
         SurveyPageState(
-            question = "8. How likely are you  to repeat your purchase?",
+            question = "9. How likely are you  to repeat your purchase?",
             options = positiveList(),
             scaleType = ScaleType.POSITIVE,
             textVisible = true,
