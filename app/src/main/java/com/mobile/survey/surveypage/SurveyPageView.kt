@@ -133,10 +133,10 @@ fun MovingArrowAnimation(direction: ArrowDirection, painter: Painter, iconTint: 
 
     val offsetAnimation by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = if (direction == ArrowDirection.UP) -2f else 2f,
+        targetValue = if (direction == ArrowDirection.UP) -3f else 3f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 1000, // Longer duration for subtle movement
+                durationMillis = 500, // Longer duration for subtle movement
                 easing = LinearEasing // Use LinearEasing for smooth motion
             ), repeatMode = RepeatMode.Reverse
         ),
@@ -147,7 +147,7 @@ fun MovingArrowAnimation(direction: ArrowDirection, painter: Painter, iconTint: 
 
     Box(
         modifier = Modifier
-            .size(50.dp)
+            .size(80.dp) // Adjust the size to increase the length of the icon
             .offset(y = offsetY)
             .padding(4.dp)
     ) {
