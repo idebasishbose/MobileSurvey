@@ -1,38 +1,24 @@
 package com.mobile.survey.surveypage
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -41,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.mobile.survey.R
 import com.mobile.survey.surveypage.composables.ColoredSpacer
 import com.mobile.survey.surveypage.composables.IndicatorOrientation
+import com.mobile.survey.surveypage.composables.MovingArrowAnimation
 import com.mobile.survey.surveypage.composables.PagerIndicator
 import com.mobile.survey.surveypage.model.SurveyPagesState
 import com.mobile.survey.surveypage.model.surveyPagesState
@@ -121,41 +108,6 @@ fun TextWithIconVerticalLayout(
 
         MovingArrowAnimation(
             direction = ArrowDirection.DOWN, painter = painter2, iconTint = iconTint
-        )
-    }
-}
-
-@Composable
-fun MovingArrowAnimation(direction: ArrowDirection, painter: Painter, iconTint: Color) {
-    var offsetY by remember { mutableStateOf(0.dp) }
-
-    val infiniteTransition = rememberInfiniteTransition(label = "")
-
-    val offsetAnimation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = if (direction == ArrowDirection.UP) -3f else 3f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = 500, // Longer duration for subtle movement
-                easing = LinearEasing // Use LinearEasing for smooth motion
-            ), repeatMode = RepeatMode.Reverse
-        ),
-        label = ""
-    )
-
-    offsetY = offsetAnimation.dp
-
-    Box(
-        modifier = Modifier
-            .size(80.dp) // Adjust the size to increase the length of the icon
-            .offset(y = offsetY)
-            .padding(4.dp)
-    ) {
-        Icon(
-            painter = painter,
-            contentDescription = null,
-            tint = iconTint,
-            modifier = Modifier.fillMaxSize()
         )
     }
 }

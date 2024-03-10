@@ -1,5 +1,10 @@
 package com.mobile.survey.surveypage
 
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.VibratorManager
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,6 +35,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -42,6 +49,7 @@ import com.mobile.survey.surveypage.model.ScaleType
 import com.mobile.survey.surveypage.model.SurveyPageState
 import com.mobile.survey.surveypage.model.positiveList
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun SurveyPage(
     enableColor: Boolean, surveyPageState: SurveyPageState, modifier: Modifier = Modifier
@@ -73,6 +81,7 @@ fun SurveyPage(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun OptionList(
     enableColor: Boolean, surveyPageState: SurveyPageState, modifier: Modifier = Modifier
@@ -86,12 +95,12 @@ fun OptionList(
                 val option = surveyPageState.options[index]
                 OptionItem(
                     enableColor = enableColor,
-                    itemHeight = if (surveyPageState.options.size > 5) 45 else 70,
                     surveyPageState = surveyPageState,
                     option = option,
                     isSelected = selectedOption == option,
                     onSelected = { selectedOption = it },
-                    scaleType = surveyPageState.scaleType
+                    scaleType = surveyPageState.scaleType,
+                    itemHeight = if (surveyPageState.options.size > 6) 45 else 70
                 )
             }
         }
@@ -102,12 +111,11 @@ fun OptionList(
                 val option = newOption[index]
                 OptionItem(
                     enableColor = enableColor,
+                    surveyPageState = surveyPageState,
                     option = option,
                     isSelected = selectedOption == option,
                     onSelected = { selectedOption = it },
                     scaleType = surveyPageState.scaleType,
-                    surveyPageState = surveyPageState,
-                    itemHeight = if (surveyPageState.options.size > 5) 50 else 70
                 )
             }
         }
@@ -115,6 +123,7 @@ fun OptionList(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun OptionItem(
     enableColor: Boolean,
@@ -123,14 +132,15 @@ fun OptionItem(
     onSelected: (Option) -> Unit,
     scaleType: ScaleType,
     surveyPageState: SurveyPageState,
-    itemHeight: Int
+    itemHeight: Int = 70
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
     val zoomFactor by animateFloatAsState(targetValue = if (isSelected) 1.2f else 1f, label = "")
 
     val color = if (enableColor) option.color else colorResource(id = R.color.white)
-
+    val hapticFeedback = LocalHapticFeedback.current
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -140,19 +150,37 @@ fun OptionItem(
             .background(color = color)
             .border(width = 2.dp, color = borderColor)
             .graphicsLayer(scaleX = zoomFactor, scaleY = zoomFactor)
-            .clickable(interactionSource = interactionSource,
-                indication = null,
-                onClick = { onSelected(option) }), contentAlignment = Alignment.Center
+            .clickable(interactionSource = interactionSource, indication = null, onClick = {
+                onSelected(option)
+                triggerHapticFeedback(context, option.title.toInt())
+            }), contentAlignment = Alignment.Center
     ) {
         if (!surveyPageState.textVisible) return
 
         RadioText(
             option = option, scaleType = scaleType
         )
-
     }
+}
 
+@RequiresApi(Build.VERSION_CODES.S)
+private fun triggerHapticFeedback(context: Context, intensity: Int) {
+    val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager?
 
+    if (vibratorManager != null) {
+        val vibrator = vibratorManager.defaultVibrator
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val effect = VibrationEffect.createWaveform(
+                longArrayOf(0, 20), // Timing array with non-zero durations
+                intArrayOf(255, intensity*10), // Amplitude array with corresponding values
+                -1 // Repeat index, -1 for no repeat
+            )
+            vibrator.vibrate(effect)
+        } else {
+            vibrator.vibrate(intensity.toLong())
+        }
+    }
 }
 
 
@@ -185,6 +213,7 @@ fun RadioText(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Preview(name = "SurveyPageComposable")
 @Composable
 private fun PreviewSurveyPageComposableVertical() {
@@ -200,6 +229,7 @@ private fun PreviewSurveyPageComposableVertical() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Preview(name = "SurveyPageComposable")
 @Composable
 private fun PreviewSurveyPageComposableHorizontal() {
