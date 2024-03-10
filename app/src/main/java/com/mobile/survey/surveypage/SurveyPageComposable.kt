@@ -48,6 +48,7 @@ import com.mobile.survey.surveypage.model.Option
 import com.mobile.survey.surveypage.model.ScaleType
 import com.mobile.survey.surveypage.model.SurveyPageState
 import com.mobile.survey.surveypage.model.positiveList
+import kotlin.math.pow
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
@@ -165,15 +166,26 @@ fun OptionItem(
 
 @RequiresApi(Build.VERSION_CODES.S)
 private fun triggerHapticFeedback(context: Context, intensity: Int) {
-    val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager?
+    if (intensity <= 0) {
+        // Skip vibration for intensity values less than or equal to 0
+        return
+    }
+    val vibratorManager =
+        context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager?
 
     if (vibratorManager != null) {
         val vibrator = vibratorManager.defaultVibrator
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Calculate amplitude based on the intensity parameter
+            val amplitude = calculateAmplitude(intensity)
+
+            // Calculate duration based on the intensity parameter
+            val duration = calculateDuration(intensity)
+
             val effect = VibrationEffect.createWaveform(
-                longArrayOf(0, 20), // Timing array with non-zero durations
-                intArrayOf(255, intensity*10), // Amplitude array with corresponding values
+                longArrayOf(0, duration), // Timing array with non-zero durations
+                intArrayOf(255, amplitude), // Amplitude array with increased values for intensity
                 -1 // Repeat index, -1 for no repeat
             )
             vibrator.vibrate(effect)
@@ -181,6 +193,18 @@ private fun triggerHapticFeedback(context: Context, intensity: Int) {
             vibrator.vibrate(intensity.toLong())
         }
     }
+}
+
+private fun calculateAmplitude(intensity: Int): Int {
+    // Logarithmic mapping from intensity (0-100) to amplitude (20-255)
+    val scaledIntensity = intensity / 2 // Adjust the scaling factor as needed
+    return (2.0.pow(scaledIntensity.toDouble() / 10) + 20).toInt().coerceIn(20, 255)
+}
+
+private fun calculateDuration(intensity: Int): Long {
+    // Logarithmic mapping from intensity (0-100) to duration (100-1000 ms)
+    val scaledIntensity = intensity / 2 // Adjust the scaling factor as needed
+    return (2.0.pow(scaledIntensity.toDouble() / 10) * 100 + 100).toLong().coerceIn(100, 1000)
 }
 
 
