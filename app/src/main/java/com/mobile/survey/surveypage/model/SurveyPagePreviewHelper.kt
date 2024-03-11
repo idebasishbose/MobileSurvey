@@ -2,8 +2,8 @@ package com.mobile.survey.surveypage.model
 
 import com.mobile.survey.R
 
-fun surveyPagesState() = SurveyPagesState(
-    enableColor = true,
+fun surveyPagesState(enableColor: Boolean = true) = SurveyPagesState(
+    enableColor = enableColor,
     surveyPagesState = listOf(
         SurveyPageState(
             question = "1. How likely is it that you would recommend this company to a friend or colleague?",

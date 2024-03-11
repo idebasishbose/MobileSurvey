@@ -3,43 +3,46 @@ package com.mobile.survey
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.VerticalPager
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.mobile.survey.surveypage.SurveyPage
+import com.mobile.survey.surveypage.SurveyPageView
 import com.mobile.survey.surveypage.model.ScaleType
 import com.mobile.survey.surveypage.model.SurveyPageState
-import com.mobile.survey.surveypage.model.SurveyPagesState
 import com.mobile.survey.surveypage.model.positiveList
-import com.mobile.survey.surveypage.model.surveyPagesState
 import com.mobile.survey.ui.theme.MobileSurveyTheme
-import kotlin.math.absoluteValue
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
+            val navController = rememberNavController()
+
             MobileSurveyTheme(darkTheme = false) {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -48,75 +51,68 @@ class MainActivity : ComponentActivity() {
                         .padding(horizontal = 16.dp),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    NavHost(navController, startDestination = "landing") {
+                        composable("landing") { LandingPage(navController) }
+                        composable("surveyPageView/{parameter}") { backStackEntry ->
+                            val parameter = backStackEntry.arguments?.getString("parameter") ?: ""
+                            SurveyPageView(parameter = parameter)
+                        }
+                    }
 
-
-                    SurveyPagesCarousel(surveyPagesCarouselState = surveyPagesState())
                 }
             }
         }
     }
+
+
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SurveyPagesCarousel(surveyPagesCarouselState: SurveyPagesState) {
-    val pageCount = surveyPagesCarouselState.surveyPagesState.size
-    val pagerState = rememberPagerState(pageCount = { pageCount })
-    VerticalPager(
-        pageSize = PageSize.Fill,
-        state = pagerState,
-//        flingBehavior = PagerDefaults.flingBehavior(state = pagerState),
-    ) { page ->
-        Box(
-            Modifier
-//                .pagerFadeTransition(page = page, pagerState = pagerState)
-                .fillMaxSize()
-        ) {
-
-            Row(
-                Modifier
-                    .height(24.dp)
-                    .padding(start = 4.dp)
-                    .fillMaxWidth()
-                    .align(Alignment.TopCenter), horizontalArrangement = Arrangement.Start
-            ) {
-                repeat(pageCount) { iteration ->
-
-                    val color =
-                        if (pagerState.currentPage == iteration) colorResource(id = R.color.green10)
-                        else colorResource(id = R.color.green10).copy(
-                            alpha = 0.2f
-                        )
-                    Box(
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .clip(RoundedCornerShape(2.dp))
-                            .background(color)
-                            .weight(1f)
-                            .height(4.dp)
-                    )
-                }
-            }
-            SurveyPage(
-                enableColor = surveyPagesCarouselState.enableColor,
-                surveyPageState = surveyPagesCarouselState.surveyPagesState[page]
-            )
-
-        }
+fun LandingButton(navController: NavHostController, text: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(color = colorResource(id = R.color.green02))
+            .clickable { navController.navigate("surveyPageView/$text") },
+        contentAlignment = Alignment.Center
+    ) {
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(text = text, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
     }
 }
 
-// extension method for current page offset
-@OptIn(ExperimentalFoundationApi::class)
-fun PagerState.calculateCurrentOffsetForPage(page: Int): Float {
-    return (currentPage - page) + currentPageOffsetFraction
+@Composable
+fun LandingPage(navController: NavHostController) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        LandingButton(navController, text = "Prototype 1")
+        LandingButton(navController, text = "Prototype 2")
+        LandingButton(navController, text = "Prototype 3")
+        LandingButton(navController, text = "Prototype 4")
+        LandingButton(navController, text = "Prototype 5")
+        LandingButton(navController, text = "Prototype 6")
+
+    }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
-fun Modifier.pagerFadeTransition(page: Int, pagerState: PagerState) = graphicsLayer {
-    val pageOffset = pagerState.calculateCurrentOffsetForPage(page)
-    translationY = pageOffset * size.width
-    alpha = 1 - pageOffset.absoluteValue
+
+@Composable
+fun NavigateToDetailsScreen(parameter: String) {
+    // Navigate to another composable with the parameter
+    // You can use navigation library or any other navigation mechanism here
+    // For demonstration, let's just show a toast with the parameter
+    val context = LocalContext.current
+
+    SurveyPageView("test")
+//    Toast.makeText(context, "Parameter: $parameter", Toast.LENGTH_SHORT).show()
+
+
 }
 
 
